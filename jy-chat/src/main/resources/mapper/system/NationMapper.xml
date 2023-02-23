@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.NationMapper">
+    
+    <resultMap type="Nation" id="NationResult">
+        <result property="nId"    column="N_ID"    />
+        <result property="nName"    column="N_Name"    />
+    </resultMap>
+
+    <sql id="selectNationVo">
+        select N_ID, N_Name from nation
+    </sql>
+
+    <select id="selectNationList" parameterType="Nation" resultMap="NationResult">
+        <include refid="selectNationVo"/>
+        <where>  
+            <if test="nName != null  and nName != ''"> and N_Name like concat('%', #{nName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectNationByNId" parameterType="Long" resultMap="NationResult">
+        <include refid="selectNationVo"/>
+        where N_ID = #{nId}
+    </select>
+        
+    <insert id="insertNation" parameterType="Nation">
+        insert into nation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="nId != null">N_ID,</if>
+            <if test="nName != null">N_Name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="nId != null">#{nId},</if>
+            <if test="nName != null">#{nName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNation" parameterType="Nation">
+        update nation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="nName != null">N_Name = #{nName},</if>
+        </trim>
+        where N_ID = #{nId}
+    </update>
+
+    <delete id="deleteNationByNId" parameterType="Long">
+        delete from nation where N_ID = #{nId}
+    </delete>
+
+    <delete id="deleteNationByNIds" parameterType="String">
+        delete from nation where N_ID in 
+        <foreach item="nId" collection="array" open="(" separator="," close=")">
+            #{nId}
+        </foreach>
+    </delete>
+</mapper>

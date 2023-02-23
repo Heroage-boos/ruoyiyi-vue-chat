@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CityMapper">
+    
+    <resultMap type="City" id="CityResult">
+        <result property="cId"    column="C_ID"    />
+        <result property="cName"    column="C_Name"    />
+        <result property="cProvinceid"    column="C_ProvinceID"    />
+    </resultMap>
+
+    <sql id="selectCityVo">
+        select C_ID, C_Name, C_ProvinceID from city
+    </sql>
+
+    <select id="selectCityList" parameterType="City" resultMap="CityResult">
+        <include refid="selectCityVo"/>
+        <where>  
+            <if test="cId != null "> and C_ID = #{cId}</if>
+            <if test="cName != null  and cName != ''"> and C_Name like concat('%', #{cName}, '%')</if>
+            <if test="cProvinceid != null "> and C_ProvinceID = #{cProvinceid}</if>
+        </where>
+    </select>
+    
+    <select id="selectCityByCId" parameterType="Long" resultMap="CityResult">
+        <include refid="selectCityVo"/>
+        where C_ID = #{cId}
+    </select>
+        
+    <insert id="insertCity" parameterType="City">
+        insert into city
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cId != null">C_ID,</if>
+            <if test="cName != null">C_Name,</if>
+            <if test="cProvinceid != null">C_ProvinceID,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cId != null">#{cId},</if>
+            <if test="cName != null">#{cName},</if>
+            <if test="cProvinceid != null">#{cProvinceid},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCity" parameterType="City">
+        update city
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cName != null">C_Name = #{cName},</if>
+            <if test="cProvinceid != null">C_ProvinceID = #{cProvinceid},</if>
+        </trim>
+        where C_ID = #{cId}
+    </update>
+
+    <delete id="deleteCityByCId" parameterType="Long">
+        delete from city where C_ID = #{cId}
+    </delete>
+
+    <delete id="deleteCityByCIds" parameterType="String">
+        delete from city where C_ID in 
+        <foreach item="cId" collection="array" open="(" separator="," close=")">
+            #{cId}
+        </foreach>
+    </delete>
+</mapper>

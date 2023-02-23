@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.FriendsMapper">
+    
+    <resultMap type="Friends" id="FriendsResult">
+        <result property="fId"    column="F_ID"    />
+        <result property="fFirendid"    column="F_FirendID"    />
+        <result property="fUserid"    column="F_UserID"    />
+        <result property="fName"    column="F_Name"    />
+        <result property="fFriendtypeid"    column="F_FriendTypeID"    />
+        <result property="fFriendgroupsid"    column="F_FriendGroupsID"    />
+    </resultMap>
+
+    <sql id="selectFriendsVo">
+        select F_ID, F_FirendID, F_UserID, F_Name, F_FriendTypeID, F_FriendGroupsID from friends
+    </sql>
+
+    <select id="selectFriendsList" parameterType="Friends" resultMap="FriendsResult">
+        <include refid="selectFriendsVo"/>
+        <where>  
+            <if test="fFirendid != null "> and F_FirendID = #{fFirendid}</if>
+            <if test="fUserid != null "> and F_UserID = #{fUserid}</if>
+            <if test="fName != null  and fName != ''"> and F_Name like concat('%', #{fName}, '%')</if>
+            <if test="fFriendtypeid != null "> and F_FriendTypeID = #{fFriendtypeid}</if>
+            <if test="fFriendgroupsid != null "> and F_FriendGroupsID = #{fFriendgroupsid}</if>
+        </where>
+    </select>
+    
+    <select id="selectFriendsByFId" parameterType="Long" resultMap="FriendsResult">
+        <include refid="selectFriendsVo"/>
+        where F_ID = #{fId}
+    </select>
+        
+    <insert id="insertFriends" parameterType="Friends">
+        insert into friends
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fId != null">F_ID,</if>
+            <if test="fFirendid != null">F_FirendID,</if>
+            <if test="fUserid != null">F_UserID,</if>
+            <if test="fName != null">F_Name,</if>
+            <if test="fFriendtypeid != null">F_FriendTypeID,</if>
+            <if test="fFriendgroupsid != null">F_FriendGroupsID,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fId != null">#{fId},</if>
+            <if test="fFirendid != null">#{fFirendid},</if>
+            <if test="fUserid != null">#{fUserid},</if>
+            <if test="fName != null">#{fName},</if>
+            <if test="fFriendtypeid != null">#{fFriendtypeid},</if>
+            <if test="fFriendgroupsid != null">#{fFriendgroupsid},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFriends" parameterType="Friends">
+        update friends
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fFirendid != null">F_FirendID = #{fFirendid},</if>
+            <if test="fUserid != null">F_UserID = #{fUserid},</if>
+            <if test="fName != null">F_Name = #{fName},</if>
+            <if test="fFriendtypeid != null">F_FriendTypeID = #{fFriendtypeid},</if>
+            <if test="fFriendgroupsid != null">F_FriendGroupsID = #{fFriendgroupsid},</if>
+        </trim>
+        where F_ID = #{fId}
+    </update>
+
+    <delete id="deleteFriendsByFId" parameterType="Long">
+        delete from friends where F_ID = #{fId}
+    </delete>
+
+    <delete id="deleteFriendsByFIds" parameterType="String">
+        delete from friends where F_ID in 
+        <foreach item="fId" collection="array" open="(" separator="," close=")">
+            #{fId}
+        </foreach>
+    </delete>
+</mapper>

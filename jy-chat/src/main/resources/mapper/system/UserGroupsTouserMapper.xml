@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.UserGroupsTouserMapper">
+    
+    <resultMap type="UserGroupsTouser" id="UserGroupsTouserResult">
+        <result property="ugId"    column="UG_ID"    />
+        <result property="ug Userid"    column="UG _UserID"    />
+        <result property="ug Groupid"    column="UG _GroupID"    />
+        <result property="ug Createtime"    column="UG _CreateTime"    />
+        <result property="ug Groupnick"    column="UG _GroupNick"    />
+    </resultMap>
+
+    <sql id="selectUserGroupsTouserVo">
+        select UG_ID, UG _UserID, UG _GroupID, UG _CreateTime, UG _GroupNick from user_groups_touser
+    </sql>
+
+    <select id="selectUserGroupsTouserList" parameterType="UserGroupsTouser" resultMap="UserGroupsTouserResult">
+        <include refid="selectUserGroupsTouserVo"/>
+        <where>  
+            <if test="ug Userid != null "> and UG _UserID = #{ug Userid}</if>
+            <if test="ug Groupid != null "> and UG _GroupID = #{ug Groupid}</if>
+            <if test="ug Createtime != null "> and UG _CreateTime = #{ug Createtime}</if>
+            <if test="ug Groupnick != null  and ug Groupnick != ''"> and UG _GroupNick = #{ug Groupnick}</if>
+        </where>
+    </select>
+    
+    <select id="selectUserGroupsTouserByUgId" parameterType="Long" resultMap="UserGroupsTouserResult">
+        <include refid="selectUserGroupsTouserVo"/>
+        where UG_ID = #{ugId}
+    </select>
+        
+    <insert id="insertUserGroupsTouser" parameterType="UserGroupsTouser">
+        insert into user_groups_touser
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ugId != null">UG_ID,</if>
+            <if test="ug Userid != null">UG _UserID,</if>
+            <if test="ug Groupid != null">UG _GroupID,</if>
+            <if test="ug Createtime != null">UG _CreateTime,</if>
+            <if test="ug Groupnick != null">UG _GroupNick,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ugId != null">#{ugId},</if>
+            <if test="ug Userid != null">#{ug Userid},</if>
+            <if test="ug Groupid != null">#{ug Groupid},</if>
+            <if test="ug Createtime != null">#{ug Createtime},</if>
+            <if test="ug Groupnick != null">#{ug Groupnick},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserGroupsTouser" parameterType="UserGroupsTouser">
+        update user_groups_touser
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ug Userid != null">UG _UserID = #{ug Userid},</if>
+            <if test="ug Groupid != null">UG _GroupID = #{ug Groupid},</if>
+            <if test="ug Createtime != null">UG _CreateTime = #{ug Createtime},</if>
+            <if test="ug Groupnick != null">UG _GroupNick = #{ug Groupnick},</if>
+        </trim>
+        where UG_ID = #{ugId}
+    </update>
+
+    <delete id="deleteUserGroupsTouserByUgId" parameterType="Long">
+        delete from user_groups_touser where UG_ID = #{ugId}
+    </delete>
+
+    <delete id="deleteUserGroupsTouserByUgIds" parameterType="String">
+        delete from user_groups_touser where UG_ID in 
+        <foreach item="ugId" collection="array" open="(" separator="," close=")">
+            #{ugId}
+        </foreach>
+    </delete>
+</mapper>

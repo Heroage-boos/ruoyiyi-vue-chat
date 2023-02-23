@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.FriendGroupsMapper">
+    
+    <resultMap type="FriendGroups" id="FriendGroupsResult">
+        <result property="fgId"    column="FG_ID"    />
+        <result property="fgName"    column="FG_Name"    />
+        <result property="fgUserid"    column="FG_UserID"    />
+    </resultMap>
+
+    <sql id="selectFriendGroupsVo">
+        select FG_ID, FG_Name, FG_UserID from friend_groups
+    </sql>
+
+    <select id="selectFriendGroupsList" parameterType="FriendGroups" resultMap="FriendGroupsResult">
+        <include refid="selectFriendGroupsVo"/>
+        <where>  
+            <if test="fgId != null "> and FG_ID = #{fgId}</if>
+            <if test="fgName != null  and fgName != ''"> and FG_Name like concat('%', #{fgName}, '%')</if>
+            <if test="fgUserid != null "> and FG_UserID = #{fgUserid}</if>
+        </where>
+    </select>
+    
+    <select id="selectFriendGroupsByFgId" parameterType="Long" resultMap="FriendGroupsResult">
+        <include refid="selectFriendGroupsVo"/>
+        where FG_ID = #{fgId}
+    </select>
+        
+    <insert id="insertFriendGroups" parameterType="FriendGroups">
+        insert into friend_groups
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fgId != null">FG_ID,</if>
+            <if test="fgName != null">FG_Name,</if>
+            <if test="fgUserid != null">FG_UserID,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fgId != null">#{fgId},</if>
+            <if test="fgName != null">#{fgName},</if>
+            <if test="fgUserid != null">#{fgUserid},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFriendGroups" parameterType="FriendGroups">
+        update friend_groups
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fgName != null">FG_Name = #{fgName},</if>
+            <if test="fgUserid != null">FG_UserID = #{fgUserid},</if>
+        </trim>
+        where FG_ID = #{fgId}
+    </update>
+
+    <delete id="deleteFriendGroupsByFgId" parameterType="Long">
+        delete from friend_groups where FG_ID = #{fgId}
+    </delete>
+
+    <delete id="deleteFriendGroupsByFgIds" parameterType="String">
+        delete from friend_groups where FG_ID in 
+        <foreach item="fgId" collection="array" open="(" separator="," close=")">
+            #{fgId}
+        </foreach>
+    </delete>
+</mapper>

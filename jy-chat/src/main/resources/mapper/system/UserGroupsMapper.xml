@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.UserGroupsMapper">
+    
+    <resultMap type="UserGroups" id="UserGroupsResult">
+        <result property="ugId"    column="UG_ID"    />
+        <result property="ugName"    column="UG_Name"    />
+        <result property="ugCreatetime"    column="UG_CreateTime"    />
+        <result property="ugAdminid"    column="UG_AdminID"    />
+        <result property="ugIcon"    column="UG_ICon"    />
+        <result property="ugNotice"    column="UG_Notice"    />
+        <result property="ugIntro"    column="UG_Intro"    />
+    </resultMap>
+
+    <sql id="selectUserGroupsVo">
+        select UG_ID, UG_Name, UG_CreateTime, UG_AdminID, UG_ICon, UG_Notice, UG_Intro from user_groups
+    </sql>
+
+    <select id="selectUserGroupsList" parameterType="UserGroups" resultMap="UserGroupsResult">
+        <include refid="selectUserGroupsVo"/>
+        <where>  
+            <if test="ugName != null  and ugName != ''"> and UG_Name like concat('%', #{ugName}, '%')</if>
+            <if test="ugCreatetime != null "> and UG_CreateTime = #{ugCreatetime}</if>
+            <if test="ugAdminid != null "> and UG_AdminID = #{ugAdminid}</if>
+            <if test="ugIcon != null  and ugIcon != ''"> and UG_ICon = #{ugIcon}</if>
+            <if test="ugNotice != null  and ugNotice != ''"> and UG_Notice = #{ugNotice}</if>
+            <if test="ugIntro != null  and ugIntro != ''"> and UG_Intro = #{ugIntro}</if>
+        </where>
+    </select>
+    
+    <select id="selectUserGroupsByUgId" parameterType="Long" resultMap="UserGroupsResult">
+        <include refid="selectUserGroupsVo"/>
+        where UG_ID = #{ugId}
+    </select>
+        
+    <insert id="insertUserGroups" parameterType="UserGroups">
+        insert into user_groups
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ugId != null">UG_ID,</if>
+            <if test="ugName != null">UG_Name,</if>
+            <if test="ugCreatetime != null">UG_CreateTime,</if>
+            <if test="ugAdminid != null">UG_AdminID,</if>
+            <if test="ugIcon != null">UG_ICon,</if>
+            <if test="ugNotice != null">UG_Notice,</if>
+            <if test="ugIntro != null">UG_Intro,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ugId != null">#{ugId},</if>
+            <if test="ugName != null">#{ugName},</if>
+            <if test="ugCreatetime != null">#{ugCreatetime},</if>
+            <if test="ugAdminid != null">#{ugAdminid},</if>
+            <if test="ugIcon != null">#{ugIcon},</if>
+            <if test="ugNotice != null">#{ugNotice},</if>
+            <if test="ugIntro != null">#{ugIntro},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserGroups" parameterType="UserGroups">
+        update user_groups
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ugName != null">UG_Name = #{ugName},</if>
+            <if test="ugCreatetime != null">UG_CreateTime = #{ugCreatetime},</if>
+            <if test="ugAdminid != null">UG_AdminID = #{ugAdminid},</if>
+            <if test="ugIcon != null">UG_ICon = #{ugIcon},</if>
+            <if test="ugNotice != null">UG_Notice = #{ugNotice},</if>
+            <if test="ugIntro != null">UG_Intro = #{ugIntro},</if>
+        </trim>
+        where UG_ID = #{ugId}
+    </update>
+
+    <delete id="deleteUserGroupsByUgId" parameterType="Long">
+        delete from user_groups where UG_ID = #{ugId}
+    </delete>
+
+    <delete id="deleteUserGroupsByUgIds" parameterType="String">
+        delete from user_groups where UG_ID in 
+        <foreach item="ugId" collection="array" open="(" separator="," close=")">
+            #{ugId}
+        </foreach>
+    </delete>
+</mapper>

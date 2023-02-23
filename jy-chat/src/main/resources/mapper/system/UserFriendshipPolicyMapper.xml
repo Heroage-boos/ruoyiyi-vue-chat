@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.UserFriendshipPolicyMapper">
+    
+    <resultMap type="UserFriendshipPolicy" id="UserFriendshipPolicyResult">
+        <result property="uFpId"    column="U_FP_ID"    />
+        <result property="uFriendshippolicy"    column="U_FriendshipPolicy"    />
+    </resultMap>
+
+    <sql id="selectUserFriendshipPolicyVo">
+        select U_FP_ID, U_FriendshipPolicy from user_friendship_policy
+    </sql>
+
+    <select id="selectUserFriendshipPolicyList" parameterType="UserFriendshipPolicy" resultMap="UserFriendshipPolicyResult">
+        <include refid="selectUserFriendshipPolicyVo"/>
+        <where>  
+            <if test="uFriendshippolicy != null  and uFriendshippolicy != ''"> and U_FriendshipPolicy = #{uFriendshippolicy}</if>
+        </where>
+    </select>
+    
+    <select id="selectUserFriendshipPolicyByUFpId" parameterType="Long" resultMap="UserFriendshipPolicyResult">
+        <include refid="selectUserFriendshipPolicyVo"/>
+        where U_FP_ID = #{uFpId}
+    </select>
+        
+    <insert id="insertUserFriendshipPolicy" parameterType="UserFriendshipPolicy">
+        insert into user_friendship_policy
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uFpId != null">U_FP_ID,</if>
+            <if test="uFriendshippolicy != null">U_FriendshipPolicy,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uFpId != null">#{uFpId},</if>
+            <if test="uFriendshippolicy != null">#{uFriendshippolicy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserFriendshipPolicy" parameterType="UserFriendshipPolicy">
+        update user_friendship_policy
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="uFriendshippolicy != null">U_FriendshipPolicy = #{uFriendshippolicy},</if>
+        </trim>
+        where U_FP_ID = #{uFpId}
+    </update>
+
+    <delete id="deleteUserFriendshipPolicyByUFpId" parameterType="Long">
+        delete from user_friendship_policy where U_FP_ID = #{uFpId}
+    </delete>
+
+    <delete id="deleteUserFriendshipPolicyByUFpIds" parameterType="String">
+        delete from user_friendship_policy where U_FP_ID in 
+        <foreach item="uFpId" collection="array" open="(" separator="," close=")">
+            #{uFpId}
+        </foreach>
+    </delete>
+</mapper>

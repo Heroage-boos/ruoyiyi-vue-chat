@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.UserGroupsMsgContentMapper">
+    
+    <resultMap type="UserGroupsMsgContent" id="UserGroupsMsgContentResult">
+        <result property="gm Id"    column="GM _ID"    />
+        <result property="gm Content"    column="GM _Content"    />
+        <result property="gm Fromid"    column="GM _FromID"    />
+        <result property="gm Fromuname"    column="GM _FromUName"    />
+        <result property="gm Createtime"    column="GM _CreateTime"    />
+    </resultMap>
+
+    <sql id="selectUserGroupsMsgContentVo">
+        select GM _ID, GM _Content, GM _FromID, GM _FromUName, GM _CreateTime from user_groups_msg_content
+    </sql>
+
+    <select id="selectUserGroupsMsgContentList" parameterType="UserGroupsMsgContent" resultMap="UserGroupsMsgContentResult">
+        <include refid="selectUserGroupsMsgContentVo"/>
+        <where>  
+            <if test="gm Content != null  and gm Content != ''"> and GM _Content = #{gm Content}</if>
+            <if test="gm Fromid != null "> and GM _FromID = #{gm Fromid}</if>
+            <if test="gm Fromuname != null  and gm Fromuname != ''"> and GM _FromUName like concat('%', #{gm Fromuname}, '%')</if>
+            <if test="gm Createtime != null "> and GM _CreateTime = #{gm Createtime}</if>
+        </where>
+    </select>
+    
+    <select id="selectUserGroupsMsgContentByGm Id" parameterType="Long" resultMap="UserGroupsMsgContentResult">
+        <include refid="selectUserGroupsMsgContentVo"/>
+        where GM _ID = #{gm Id}
+    </select>
+        
+    <insert id="insertUserGroupsMsgContent" parameterType="UserGroupsMsgContent">
+        insert into user_groups_msg_content
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="gm Id != null">GM _ID,</if>
+            <if test="gm Content != null">GM _Content,</if>
+            <if test="gm Fromid != null">GM _FromID,</if>
+            <if test="gm Fromuname != null">GM _FromUName,</if>
+            <if test="gm Createtime != null">GM _CreateTime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="gm Id != null">#{gm Id},</if>
+            <if test="gm Content != null">#{gm Content},</if>
+            <if test="gm Fromid != null">#{gm Fromid},</if>
+            <if test="gm Fromuname != null">#{gm Fromuname},</if>
+            <if test="gm Createtime != null">#{gm Createtime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserGroupsMsgContent" parameterType="UserGroupsMsgContent">
+        update user_groups_msg_content
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="gm Content != null">GM _Content = #{gm Content},</if>
+            <if test="gm Fromid != null">GM _FromID = #{gm Fromid},</if>
+            <if test="gm Fromuname != null">GM _FromUName = #{gm Fromuname},</if>
+            <if test="gm Createtime != null">GM _CreateTime = #{gm Createtime},</if>
+        </trim>
+        where GM _ID = #{gm Id}
+    </update>
+
+    <delete id="deleteUserGroupsMsgContentByGm Id" parameterType="Long">
+        delete from user_groups_msg_content where GM _ID = #{gm Id}
+    </delete>
+
+    <delete id="deleteUserGroupsMsgContentByGm Ids" parameterType="String">
+        delete from user_groups_msg_content where GM _ID in 
+        <foreach item="gm Id" collection="array" open="(" separator="," close=")">
+            #{gm Id}
+        </foreach>
+    </delete>
+</mapper>

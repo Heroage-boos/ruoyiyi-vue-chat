@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.MessagesMapper">
+    
+    <resultMap type="Messages" id="MessagesResult">
+        <result property="mId"    column="M_ID"    />
+        <result property="mPostmessages"    column="M_PostMessages"    />
+        <result property="mStatus"    column="M_ status"    />
+        <result property="mTime"    column="M_Time"    />
+        <result property="mMessagestypeid"    column="M_MessagesTypeID"    />
+        <result property="mFromuserid"    column="M_ FromUserID"    />
+        <result property="mTouserid"    column="M_ToUserID"    />
+    </resultMap>
+
+    <sql id="selectMessagesVo">
+        select M_ID, M_PostMessages, M_ status, M_Time, M_MessagesTypeID, M_ FromUserID, M_ToUserID from messages
+    </sql>
+
+    <select id="selectMessagesList" parameterType="Messages" resultMap="MessagesResult">
+        <include refid="selectMessagesVo"/>
+        <where>  
+            <if test="mPostmessages != null  and mPostmessages != ''"> and M_PostMessages = #{mPostmessages}</if>
+            <if test="mStatus != null "> and M_ status = #{m status}</if>
+            <if test="mTime != null "> and M_Time = #{mTime}</if>
+            <if test="mMessagestypeid != null "> and M_MessagesTypeID = #{mMessagestypeid}</if>
+            <if test="mFromuserid != null "> and M_ FromUserID = #{m fromuserid}</if>
+            <if test="mTouserid != null "> and M_ToUserID = #{mTouserid}</if>
+        </where>
+    </select>
+    
+    <select id="selectMessagesByMId" parameterType="Long" resultMap="MessagesResult">
+        <include refid="selectMessagesVo"/>
+        where M_ID = #{mId}
+    </select>
+        
+    <insert id="insertMessages" parameterType="Messages">
+        insert into messages
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mId != null">M_ID,</if>
+            <if test="mPostmessages != null">M_PostMessages,</if>
+            <if test="mStatus != null">M_ status,</if>
+            <if test="mTime != null">M_Time,</if>
+            <if test="mMessagestypeid != null">M_MessagesTypeID,</if>
+            <if test="mFromuserid != null">M_ FromUserID,</if>
+            <if test="mTouserid != null">M_ToUserID,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="mId != null">#{mId},</if>
+            <if test="mPostmessages != null">#{mPostmessages},</if>
+            <if test="mStatus != null">#{m status},</if>
+            <if test="mTime != null">#{mTime},</if>
+            <if test="mMessagestypeid != null">#{mMessagestypeid},</if>
+            <if test="mFromuserid != null">#{m fromuserid},</if>
+            <if test="mTouserid != null">#{mTouserid},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMessages" parameterType="Messages">
+        update messages
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="mPostmessages != null">M_PostMessages = #{mPostmessages},</if>
+            <if test="mStatus != null">M_ status = #{m status},</if>
+            <if test="mTime != null">M_Time = #{mTime},</if>
+            <if test="mMessagestypeid != null">M_MessagesTypeID = #{mMessagestypeid},</if>
+            <if test="mFromuserid != null">M_ FromUserID = #{m fromuserid},</if>
+            <if test="mTouserid != null">M_ToUserID = #{mTouserid},</if>
+        </trim>
+        where M_ID = #{mId}
+    </update>
+
+    <delete id="deleteMessagesByMId" parameterType="Long">
+        delete from messages where M_ID = #{mId}
+    </delete>
+
+    <delete id="deleteMessagesByMIds" parameterType="String">
+        delete from messages where M_ID in 
+        <foreach item="mId" collection="array" open="(" separator="," close=")">
+            #{mId}
+        </foreach>
+    </delete>
+</mapper>

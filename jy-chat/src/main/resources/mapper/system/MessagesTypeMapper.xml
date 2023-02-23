@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.MessagesTypeMapper">
+    
+    <resultMap type="MessagesType" id="MessagesTypeResult">
+        <result property="mtId"    column="MT_ID"    />
+        <result property="mtName"    column="MT_Name"    />
+    </resultMap>
+
+    <sql id="selectMessagesTypeVo">
+        select MT_ID, MT_Name from messages_type
+    </sql>
+
+    <select id="selectMessagesTypeList" parameterType="MessagesType" resultMap="MessagesTypeResult">
+        <include refid="selectMessagesTypeVo"/>
+        <where>  
+            <if test="mtName != null  and mtName != ''"> and MT_Name like concat('%', #{mtName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectMessagesTypeByMtId" parameterType="Long" resultMap="MessagesTypeResult">
+        <include refid="selectMessagesTypeVo"/>
+        where MT_ID = #{mtId}
+    </select>
+        
+    <insert id="insertMessagesType" parameterType="MessagesType">
+        insert into messages_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mtId != null">MT_ID,</if>
+            <if test="mtName != null">MT_Name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="mtId != null">#{mtId},</if>
+            <if test="mtName != null">#{mtName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMessagesType" parameterType="MessagesType">
+        update messages_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="mtName != null">MT_Name = #{mtName},</if>
+        </trim>
+        where MT_ID = #{mtId}
+    </update>
+
+    <delete id="deleteMessagesTypeByMtId" parameterType="Long">
+        delete from messages_type where MT_ID = #{mtId}
+    </delete>
+
+    <delete id="deleteMessagesTypeByMtIds" parameterType="String">
+        delete from messages_type where MT_ID in 
+        <foreach item="mtId" collection="array" open="(" separator="," close=")">
+            #{mtId}
+        </foreach>
+    </delete>
+</mapper>

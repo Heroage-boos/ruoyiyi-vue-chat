@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.UserStateMapper">
+    
+    <resultMap type="UserState" id="UserStateResult">
+        <result property="usId"    column="US_ID"    />
+        <result property="us Name"    column="US _Name"    />
+    </resultMap>
+
+    <sql id="selectUserStateVo">
+        select US_ID, US _Name from user_state
+    </sql>
+
+    <select id="selectUserStateList" parameterType="UserState" resultMap="UserStateResult">
+        <include refid="selectUserStateVo"/>
+        <where>  
+            <if test="us Name != null  and us Name != ''"> and US _Name like concat('%', #{us Name}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectUserStateByUsId" parameterType="Long" resultMap="UserStateResult">
+        <include refid="selectUserStateVo"/>
+        where US_ID = #{usId}
+    </select>
+        
+    <insert id="insertUserState" parameterType="UserState">
+        insert into user_state
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="usId != null">US_ID,</if>
+            <if test="us Name != null">US _Name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="usId != null">#{usId},</if>
+            <if test="us Name != null">#{us Name},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserState" parameterType="UserState">
+        update user_state
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="us Name != null">US _Name = #{us Name},</if>
+        </trim>
+        where US_ID = #{usId}
+    </update>
+
+    <delete id="deleteUserStateByUsId" parameterType="Long">
+        delete from user_state where US_ID = #{usId}
+    </delete>
+
+    <delete id="deleteUserStateByUsIds" parameterType="String">
+        delete from user_state where US_ID in 
+        <foreach item="usId" collection="array" open="(" separator="," close=")">
+            #{usId}
+        </foreach>
+    </delete>
+</mapper>

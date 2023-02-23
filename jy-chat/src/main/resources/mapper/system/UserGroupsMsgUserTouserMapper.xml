@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.UserGroupsMsgUserTouserMapper">
+    
+    <resultMap type="UserGroupsMsgUserTouser" id="UserGroupsMsgUserTouserResult">
+        <result property="gm Id"    column="GM _ID"    />
+        <result property="gm Fromuserid"    column="GM _FromUserID"    />
+        <result property="gm Fromusername"    column="GM _FromUserName"    />
+        <result property="gm Touserid"    column="GM _ToUserID"    />
+        <result property="gm Msgcontent"    column="GM _MSGContent"    />
+        <result property="gm State"    column="GM _State"    />
+        <result property="gm Createtime"    column="GM _CreateTime"    />
+        <result property="gm usergroupid"    column="GM_ UserGroupID"    />
+    </resultMap>
+
+    <sql id="selectUserGroupsMsgUserTouserVo">
+        select GM _ID, GM _FromUserID, GM _FromUserName, GM _ToUserID, GM _MSGContent, GM _State, GM _CreateTime, GM_ UserGroupID from user_groups_msg_user_touser
+    </sql>
+
+    <select id="selectUserGroupsMsgUserTouserList" parameterType="UserGroupsMsgUserTouser" resultMap="UserGroupsMsgUserTouserResult">
+        <include refid="selectUserGroupsMsgUserTouserVo"/>
+        <where>  
+            <if test="gm Fromuserid != null "> and GM _FromUserID = #{gm Fromuserid}</if>
+            <if test="gm Fromusername != null  and gm Fromusername != ''"> and GM _FromUserName like concat('%', #{gm Fromusername}, '%')</if>
+            <if test="gm Touserid != null "> and GM _ToUserID = #{gm Touserid}</if>
+            <if test="gm Msgcontent != null  and gm Msgcontent != ''"> and GM _MSGContent = #{gm Msgcontent}</if>
+            <if test="gm State != null "> and GM _State = #{gm State}</if>
+            <if test="gm Createtime != null "> and GM _CreateTime = #{gm Createtime}</if>
+            <if test="gm usergroupid != null "> and GM_ UserGroupID = #{gm usergroupid}</if>
+        </where>
+    </select>
+    
+    <select id="selectUserGroupsMsgUserTouserByGm Id" parameterType="Long" resultMap="UserGroupsMsgUserTouserResult">
+        <include refid="selectUserGroupsMsgUserTouserVo"/>
+        where GM _ID = #{gm Id}
+    </select>
+        
+    <insert id="insertUserGroupsMsgUserTouser" parameterType="UserGroupsMsgUserTouser">
+        insert into user_groups_msg_user_touser
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="gm Id != null">GM _ID,</if>
+            <if test="gm Fromuserid != null">GM _FromUserID,</if>
+            <if test="gm Fromusername != null">GM _FromUserName,</if>
+            <if test="gm Touserid != null">GM _ToUserID,</if>
+            <if test="gm Msgcontent != null">GM _MSGContent,</if>
+            <if test="gm State != null">GM _State,</if>
+            <if test="gm Createtime != null">GM _CreateTime,</if>
+            <if test="gm usergroupid != null">GM_ UserGroupID,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="gm Id != null">#{gm Id},</if>
+            <if test="gm Fromuserid != null">#{gm Fromuserid},</if>
+            <if test="gm Fromusername != null">#{gm Fromusername},</if>
+            <if test="gm Touserid != null">#{gm Touserid},</if>
+            <if test="gm Msgcontent != null">#{gm Msgcontent},</if>
+            <if test="gm State != null">#{gm State},</if>
+            <if test="gm Createtime != null">#{gm Createtime},</if>
+            <if test="gm usergroupid != null">#{gm usergroupid},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserGroupsMsgUserTouser" parameterType="UserGroupsMsgUserTouser">
+        update user_groups_msg_user_touser
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="gm Fromuserid != null">GM _FromUserID = #{gm Fromuserid},</if>
+            <if test="gm Fromusername != null">GM _FromUserName = #{gm Fromusername},</if>
+            <if test="gm Touserid != null">GM _ToUserID = #{gm Touserid},</if>
+            <if test="gm Msgcontent != null">GM _MSGContent = #{gm Msgcontent},</if>
+            <if test="gm State != null">GM _State = #{gm State},</if>
+            <if test="gm Createtime != null">GM _CreateTime = #{gm Createtime},</if>
+            <if test="gm usergroupid != null">GM_ UserGroupID = #{gm usergroupid},</if>
+        </trim>
+        where GM _ID = #{gm Id}
+    </update>
+
+    <delete id="deleteUserGroupsMsgUserTouserByGm Id" parameterType="Long">
+        delete from user_groups_msg_user_touser where GM _ID = #{gm Id}
+    </delete>
+
+    <delete id="deleteUserGroupsMsgUserTouserByGm Ids" parameterType="String">
+        delete from user_groups_msg_user_touser where GM _ID in 
+        <foreach item="gm Id" collection="array" open="(" separator="," close=")">
+            #{gm Id}
+        </foreach>
+    </delete>
+</mapper>

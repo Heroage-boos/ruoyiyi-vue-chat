@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.UserMapper">
+    
+    <resultMap type="User" id="UserResult">
+        <result property="uId"    column="U_ID"    />
+        <result property="uLoginid"    column="U_LoginID"    />
+        <result property="uNickname"    column="U_NickName"    />
+        <result property="uPassword"    column="U_PassWord"    />
+        <result property="uSignature"    column="U_SignaTure"    />
+        <result property="uSex"    column="U_Sex"    />
+        <result property="uBirthday"    column="U_Birthday"    />
+        <result property="uTelephone"    column="U_Telephone"    />
+        <result property="uName"    column="U_Name"    />
+        <result property="uEmail"    column="U_Email"    />
+        <result property="uIntro"    column="U_Intro"    />
+        <result property="uHeadportrait"    column="U_HeadPortrait"    />
+        <result property="uShengxiao"    column="U_ShengXiao"    />
+        <result property="uAge"    column="U_Age"    />
+        <result property="uConstellation"    column="U_Constellation"    />
+        <result property="uBloodtype"    column="U_BloodType"    />
+        <result property="uSchooltag"    column="U_SchoolTag"    />
+        <result property="uVocation"    column="U_Vocation"    />
+        <result property="uNationid"    column="U_NationID"    />
+        <result property="uProvinceid"    column="U_ProvinceID"    />
+        <result property="uCityid"    column="U_CityID"    />
+        <result property="uFriendshippolicyid"    column="U_FriendshipPolicyID"    />
+        <result property="uUserstateid"    column="U_UserStateID"    />
+        <result property="uFriendpolicyquestion"    column="U_FriendPolicyQuestion"    />
+        <result property="uFriendpolicyanswer"    column="U_FriendPolicyAnswer"    />
+        <result property="uFriendpolicypassword"    column="U_FriendPolicyPassword"    />
+    </resultMap>
+
+    <sql id="selectUserVo">
+        select U_ID, U_LoginID, U_NickName, U_PassWord, U_SignaTure, U_Sex, U_Birthday, U_Telephone, U_Name, U_Email, U_Intro, U_HeadPortrait, U_ShengXiao, U_Age, U_Constellation, U_BloodType, U_SchoolTag, U_Vocation, U_NationID, U_ProvinceID, U_CityID, U_FriendshipPolicyID, U_UserStateID, U_FriendPolicyQuestion, U_FriendPolicyAnswer, U_FriendPolicyPassword from user
+    </sql>
+
+    <select id="selectUserList" parameterType="User" resultMap="UserResult">
+        <include refid="selectUserVo"/>
+        <where>  
+            <if test="uLoginid != null  and uLoginid != ''"> and U_LoginID = #{uLoginid}</if>
+            <if test="uNickname != null  and uNickname != ''"> and U_NickName like concat('%', #{uNickname}, '%')</if>
+            <if test="uPassword != null  and uPassword != ''"> and U_PassWord = #{uPassword}</if>
+            <if test="uSignature != null  and uSignature != ''"> and U_SignaTure = #{uSignature}</if>
+            <if test="uSex != null "> and U_Sex = #{uSex}</if>
+            <if test="uBirthday != null "> and U_Birthday = #{uBirthday}</if>
+            <if test="uTelephone != null  and uTelephone != ''"> and U_Telephone = #{uTelephone}</if>
+            <if test="uName != null  and uName != ''"> and U_Name like concat('%', #{uName}, '%')</if>
+            <if test="uEmail != null  and uEmail != ''"> and U_Email = #{uEmail}</if>
+            <if test="uIntro != null  and uIntro != ''"> and U_Intro = #{uIntro}</if>
+            <if test="uHeadportrait != null  and uHeadportrait != ''"> and U_HeadPortrait = #{uHeadportrait}</if>
+            <if test="uShengxiao != null  and uShengxiao != ''"> and U_ShengXiao = #{uShengxiao}</if>
+            <if test="uAge != null "> and U_Age = #{uAge}</if>
+            <if test="uConstellation != null  and uConstellation != ''"> and U_Constellation = #{uConstellation}</if>
+            <if test="uBloodtype != null  and uBloodtype != ''"> and U_BloodType = #{uBloodtype}</if>
+            <if test="uSchooltag != null  and uSchooltag != ''"> and U_SchoolTag = #{uSchooltag}</if>
+            <if test="uVocation != null  and uVocation != ''"> and U_Vocation = #{uVocation}</if>
+            <if test="uNationid != null "> and U_NationID = #{uNationid}</if>
+            <if test="uProvinceid != null "> and U_ProvinceID = #{uProvinceid}</if>
+            <if test="uCityid != null "> and U_CityID = #{uCityid}</if>
+            <if test="uFriendshippolicyid != null "> and U_FriendshipPolicyID = #{uFriendshippolicyid}</if>
+            <if test="uUserstateid != null "> and U_UserStateID = #{uUserstateid}</if>
+            <if test="uFriendpolicyquestion != null  and uFriendpolicyquestion != ''"> and U_FriendPolicyQuestion = #{uFriendpolicyquestion}</if>
+            <if test="uFriendpolicyanswer != null  and uFriendpolicyanswer != ''"> and U_FriendPolicyAnswer = #{uFriendpolicyanswer}</if>
+            <if test="uFriendpolicypassword != null  and uFriendpolicypassword != ''"> and U_FriendPolicyPassword = #{uFriendpolicypassword}</if>
+        </where>
+    </select>
+    
+    <select id="selectUserByUId" parameterType="Long" resultMap="UserResult">
+        <include refid="selectUserVo"/>
+        where U_ID = #{uId}
+    </select>
+        
+    <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="uId">
+        insert into user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uLoginid != null">U_LoginID,</if>
+            <if test="uNickname != null">U_NickName,</if>
+            <if test="uPassword != null">U_PassWord,</if>
+            <if test="uSignature != null">U_SignaTure,</if>
+            <if test="uSex != null">U_Sex,</if>
+            <if test="uBirthday != null">U_Birthday,</if>
+            <if test="uTelephone != null">U_Telephone,</if>
+            <if test="uName != null">U_Name,</if>
+            <if test="uEmail != null">U_Email,</if>
+            <if test="uIntro != null">U_Intro,</if>
+            <if test="uHeadportrait != null">U_HeadPortrait,</if>
+            <if test="uShengxiao != null">U_ShengXiao,</if>
+            <if test="uAge != null">U_Age,</if>
+            <if test="uConstellation != null">U_Constellation,</if>
+            <if test="uBloodtype != null">U_BloodType,</if>
+            <if test="uSchooltag != null">U_SchoolTag,</if>
+            <if test="uVocation != null">U_Vocation,</if>
+            <if test="uNationid != null">U_NationID,</if>
+            <if test="uProvinceid != null">U_ProvinceID,</if>
+            <if test="uCityid != null">U_CityID,</if>
+            <if test="uFriendshippolicyid != null">U_FriendshipPolicyID,</if>
+            <if test="uUserstateid != null">U_UserStateID,</if>
+            <if test="uFriendpolicyquestion != null">U_FriendPolicyQuestion,</if>
+            <if test="uFriendpolicyanswer != null">U_FriendPolicyAnswer,</if>
+            <if test="uFriendpolicypassword != null">U_FriendPolicyPassword,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uLoginid != null">#{uLoginid},</if>
+            <if test="uNickname != null">#{uNickname},</if>
+            <if test="uPassword != null">#{uPassword},</if>
+            <if test="uSignature != null">#{uSignature},</if>
+            <if test="uSex != null">#{uSex},</if>
+            <if test="uBirthday != null">#{uBirthday},</if>
+            <if test="uTelephone != null">#{uTelephone},</if>
+            <if test="uName != null">#{uName},</if>
+            <if test="uEmail != null">#{uEmail},</if>
+            <if test="uIntro != null">#{uIntro},</if>
+            <if test="uHeadportrait != null">#{uHeadportrait},</if>
+            <if test="uShengxiao != null">#{uShengxiao},</if>
+            <if test="uAge != null">#{uAge},</if>
+            <if test="uConstellation != null">#{uConstellation},</if>
+            <if test="uBloodtype != null">#{uBloodtype},</if>
+            <if test="uSchooltag != null">#{uSchooltag},</if>
+            <if test="uVocation != null">#{uVocation},</if>
+            <if test="uNationid != null">#{uNationid},</if>
+            <if test="uProvinceid != null">#{uProvinceid},</if>
+            <if test="uCityid != null">#{uCityid},</if>
+            <if test="uFriendshippolicyid != null">#{uFriendshippolicyid},</if>
+            <if test="uUserstateid != null">#{uUserstateid},</if>
+            <if test="uFriendpolicyquestion != null">#{uFriendpolicyquestion},</if>
+            <if test="uFriendpolicyanswer != null">#{uFriendpolicyanswer},</if>
+            <if test="uFriendpolicypassword != null">#{uFriendpolicypassword},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUser" parameterType="User">
+        update user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="uLoginid != null">U_LoginID = #{uLoginid},</if>
+            <if test="uNickname != null">U_NickName = #{uNickname},</if>
+            <if test="uPassword != null">U_PassWord = #{uPassword},</if>
+            <if test="uSignature != null">U_SignaTure = #{uSignature},</if>
+            <if test="uSex != null">U_Sex = #{uSex},</if>
+            <if test="uBirthday != null">U_Birthday = #{uBirthday},</if>
+            <if test="uTelephone != null">U_Telephone = #{uTelephone},</if>
+            <if test="uName != null">U_Name = #{uName},</if>
+            <if test="uEmail != null">U_Email = #{uEmail},</if>
+            <if test="uIntro != null">U_Intro = #{uIntro},</if>
+            <if test="uHeadportrait != null">U_HeadPortrait = #{uHeadportrait},</if>
+            <if test="uShengxiao != null">U_ShengXiao = #{uShengxiao},</if>
+            <if test="uAge != null">U_Age = #{uAge},</if>
+            <if test="uConstellation != null">U_Constellation = #{uConstellation},</if>
+            <if test="uBloodtype != null">U_BloodType = #{uBloodtype},</if>
+            <if test="uSchooltag != null">U_SchoolTag = #{uSchooltag},</if>
+            <if test="uVocation != null">U_Vocation = #{uVocation},</if>
+            <if test="uNationid != null">U_NationID = #{uNationid},</if>
+            <if test="uProvinceid != null">U_ProvinceID = #{uProvinceid},</if>
+            <if test="uCityid != null">U_CityID = #{uCityid},</if>
+            <if test="uFriendshippolicyid != null">U_FriendshipPolicyID = #{uFriendshippolicyid},</if>
+            <if test="uUserstateid != null">U_UserStateID = #{uUserstateid},</if>
+            <if test="uFriendpolicyquestion != null">U_FriendPolicyQuestion = #{uFriendpolicyquestion},</if>
+            <if test="uFriendpolicyanswer != null">U_FriendPolicyAnswer = #{uFriendpolicyanswer},</if>
+            <if test="uFriendpolicypassword != null">U_FriendPolicyPassword = #{uFriendpolicypassword},</if>
+        </trim>
+        where U_ID = #{uId}
+    </update>
+
+    <delete id="deleteUserByUId" parameterType="Long">
+        delete from user where U_ID = #{uId}
+    </delete>
+
+    <delete id="deleteUserByUIds" parameterType="String">
+        delete from user where U_ID in 
+        <foreach item="uId" collection="array" open="(" separator="," close=")">
+            #{uId}
+        </foreach>
+    </delete>
+</mapper>

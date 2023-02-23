@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ProvinceMapper">
+    
+    <resultMap type="Province" id="ProvinceResult">
+        <result property="pId"    column="P_ID"    />
+        <result property="pName"    column="P_Name"    />
+        <result property="pNationid"    column="P_NationID"    />
+    </resultMap>
+
+    <sql id="selectProvinceVo">
+        select P_ID, P_Name, P_NationID from province
+    </sql>
+
+    <select id="selectProvinceList" parameterType="Province" resultMap="ProvinceResult">
+        <include refid="selectProvinceVo"/>
+        <where>  
+            <if test="pId != null "> and P_ID = #{pId}</if>
+            <if test="pName != null  and pName != ''"> and P_Name like concat('%', #{pName}, '%')</if>
+            <if test="pNationid != null "> and P_NationID = #{pNationid}</if>
+        </where>
+    </select>
+    
+    <select id="selectProvinceByPId" parameterType="Long" resultMap="ProvinceResult">
+        <include refid="selectProvinceVo"/>
+        where P_ID = #{pId}
+    </select>
+        
+    <insert id="insertProvince" parameterType="Province">
+        insert into province
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pId != null">P_ID,</if>
+            <if test="pName != null">P_Name,</if>
+            <if test="pNationid != null">P_NationID,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pId != null">#{pId},</if>
+            <if test="pName != null">#{pName},</if>
+            <if test="pNationid != null">#{pNationid},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProvince" parameterType="Province">
+        update province
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pName != null">P_Name = #{pName},</if>
+            <if test="pNationid != null">P_NationID = #{pNationid},</if>
+        </trim>
+        where P_ID = #{pId}
+    </update>
+
+    <delete id="deleteProvinceByPId" parameterType="Long">
+        delete from province where P_ID = #{pId}
+    </delete>
+
+    <delete id="deleteProvinceByPIds" parameterType="String">
+        delete from province where P_ID in 
+        <foreach item="pId" collection="array" open="(" separator="," close=")">
+            #{pId}
+        </foreach>
+    </delete>
+</mapper>
